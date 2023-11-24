@@ -20,6 +20,21 @@ Deno.serve(async (req) => {
         return new Response(JSON.stringify(data))
     }
 
+    if (req.method === "POST" && pathname === "/messages") {
+        const requestParams = await req.json();
+        const { error } = await supabaseClient.from("messages").insert({
+            author: requestParams.author,
+            message: requestParams.message
+        });
+        if (error) {
+            return new Response(JSON.stringify(error), { error: 500 });
+        }
+
+        return new Promise(JSON.stringify({
+            resp: "success",
+        }))
+    }
+
     return serveDir(req, {
         fsRoot: 'public',
         urlRoot: '',
