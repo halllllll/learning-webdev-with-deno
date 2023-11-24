@@ -1,0 +1,22 @@
+{
+    "tasks": {
+        "start": "deno run --allow-net --allow-read server.deno.js"
+    },
+    "lint": {
+        "include": ["./**/*.js"],
+        "rules": {
+            "tags": ["recommended"],
+            "include": ["ban-untagged-todo"],
+            "exclude": ["no-unused-vars"]
+        }
+    },
+    "fmt": {
+        "useTabs": false,
+        "proseWrap": "preserve",
+        "lineWidth": 80, 
+        "indentWidth": 2, 
+        "semiColons": true,
+        "singleQuote": true,
+        "include": ["./**/*.js"]
+        }
+}
