@@ -35,4 +35,32 @@ document.getElementById("post-form")
         } catch (err) {
             console.error(err)
         }
-    })
+    });
+
+
+const content = document.querySelector(".content");
+content.querySelector(".nice").addEventListener("click", {
+    content: content,
+    handleEvent: async function () {
+        const id = this.content.querySelector(".id").innerText;
+        const incrementNiceCount = Number(this.content.querySelector(".nice-count").innerText) + 1;
+        await fetch(`/messages/${id}/nice`, {
+            method: "PUT",
+            body: JSON.stringify({
+                nice_count: incrementNiceCount
+            }),
+        });
+    }
+});
+
+content.querySelector(".delete").addEventListener("click", {
+    content: content,
+    handleEvent: async function () {
+        const id = this.content.querySelector(".id").innerText;
+        await fetch(`/messages/${id}`, {
+            method: "DELETE"
+        });
+
+        updateTimeLine();
+    }
+})

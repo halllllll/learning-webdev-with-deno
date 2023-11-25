@@ -27,3 +27,33 @@ body {
     padding: 8px;
     gap: 4px;
 }
+
+.content{
+    display: flex;
+    flex-direction: column;
+    width: 50vh;
+
+    border: 1px solid brown;
+    padding: 4px;
+}
+.content-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+}
+
+.content-footer{
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+}
+
+.message{
+    font-size: 2rem;
+}
+
+.id{
+    font-size: calc(1rem-4px);
+    color: darkgrey;
+}
