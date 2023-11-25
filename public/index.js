@@ -4,6 +4,64 @@ async function updateTimeLine() {
     const response = await fetch("/messages");
     const messages = await response.json();
 
+    const timeLineHtml = document.querySelector(".timeline");
+
+    // すでに中身があったら削除
+    while (timeLineHtml.firstChild) {
+        timeLineHtml.removeChild(timeLineHtml.firstChild)
+    }
+
+    const contentTemplate = document.getElementById("content-template");
+
+    messages.forEach((message) => {
+        const content = createContent(message);
+        timeLineHtml.appendChild(content);
+    })
+
+    function createContent(message) {
+        // テンプレートを複製
+        const contentObject = contentTemplate.content.cloneNode(true);
+        const content = contentObject.querySelector(".content");
+
+        content.id = message.id;
+        content.querySelector(".author").innerText = message.author;
+        content.querySelector(".id").innerText = message.id;
+        content.querySelector(".message").innerText = message.message;
+        content.querySelector(".nice-count").innerText = message.nice_count;
+
+        content.querySelector(".nice").addEventListener("click", {
+            content: content,
+            handleEvent: async function () {
+                const id = this.content.querySelector(".id").innerText;
+                const incrementNiceCount = Number(this.content.querySelector(".nice-count").innerText) + 1;
+                await fetch(`/messages/${id}/nice`, {
+                    method: "PUT",
+                    body: JSON.stringify({
+                        nice_count: incrementNiceCount
+                    }),
+                });
+
+                updateTimeLine();
+
+            }
+        });
+
+        content.querySelector(".delete").addEventListener("click", {
+            content: content,
+            handleEvent: async function () {
+                const id = this.content.querySelector(".id").innerText;
+                await fetch(`/messages/${id}`, {
+                    method: "DELETE"
+                });
+
+                updateTimeLine();
+            }
+        })
+
+
+        return content;
+    }
+
     console.log("画面読み込み時は全部データを取得する")
     console.log(messages);
 }
@@ -21,7 +79,6 @@ document.getElementById("post-form")
                 alert("データが空だとだめだよ〜")
                 return;
             }
-            console.log("あれ？データは...？")
 
             await fetch("/messages", {
                 method: "POST",
@@ -32,35 +89,12 @@ document.getElementById("post-form")
                 })
             });
             document.getElementById("post-form").reset();
+
         } catch (err) {
             console.error(err)
+        } finally {
+            updateTimeLine();
         }
     });
 
 
-const content = document.querySelector(".content");
-content.querySelector(".nice").addEventListener("click", {
-    content: content,
-    handleEvent: async function () {
-        const id = this.content.querySelector(".id").innerText;
-        const incrementNiceCount = Number(this.content.querySelector(".nice-count").innerText) + 1;
-        await fetch(`/messages/${id}/nice`, {
-            method: "PUT",
-            body: JSON.stringify({
-                nice_count: incrementNiceCount
-            }),
-        });
-    }
-});
-
-content.querySelector(".delete").addEventListener("click", {
-    content: content,
-    handleEvent: async function () {
-        const id = this.content.querySelector(".id").innerText;
-        await fetch(`/messages/${id}`, {
-            method: "DELETE"
-        });
-
-        updateTimeLine();
-    }
-})

@@ -57,3 +57,11 @@ body {
     font-size: calc(1rem-4px);
     color: darkgrey;
 }
+
+.timeline{
+    display: flex;
+    flex-direction: column-reverse;
+    overflow: scroll;
+    gap: 8px;
+}
+

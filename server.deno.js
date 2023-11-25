@@ -22,7 +22,6 @@ Deno.serve(async (req) => {
     }
 
     if (req.method === "POST" && pathname === "/messages") {
-        console.log("きた？？・")
         const requestParams = await req.json();
         const { error } = await supabaseClient.from("messages").insert({
             author: requestParams.author,
@@ -61,9 +60,8 @@ Deno.serve(async (req) => {
     }
     const deletePattern = new URLPattern({ pathname: "/messages/:id" });
     if (req.method === "DELETE" && deletePattern.test({ pathname })) {
-        const messsageId = deletePattern.exec({ pathname }).pathname.group;
-
-        const { error } = await supabaseClient.from("messages").delete().eq("id", Number(messsageId));
+        const messageId = deletePattern.exec({ pathname }).pathname.groups.id;
+        const { error } = await supabaseClient.from("messages").delete().eq("id", Number(messageId));
 
         if (error) {
             return new Response(JSON.stringify(error), { status: 500 });
