@@ -9,6 +9,7 @@ const supabaseClient = createClient(SUPABASE_URL, SUPABASE_API_KEY);
 
 Deno.serve(async (req) => {
     const pathname = new URL(req.url).pathname;
+    console.log(req.method, pathname);
 
     if (req.method === "GET" && pathname === "/messages") {
         // all
@@ -21,6 +22,7 @@ Deno.serve(async (req) => {
     }
 
     if (req.method === "POST" && pathname === "/messages") {
+        console.log("きた？？・")
         const requestParams = await req.json();
         const { error } = await supabaseClient.from("messages").insert({
             author: requestParams.author,
@@ -30,7 +32,7 @@ Deno.serve(async (req) => {
             return new Response(JSON.stringify(error), { error: 500 });
         }
 
-        return new Promise(JSON.stringify({
+        return new Response(JSON.stringify({
             resp: "success",
         }))
     }

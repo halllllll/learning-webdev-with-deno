@@ -8,5 +8,17 @@
 </head>
 <body>
     <h1>Hello my First Deno App!</h1>
+    <form action="/messages" method="POST" id="post-form">
+        <div>
+            <label>
+                名前：
+                <input type="text" id="post-author" required>
+            </label>
+        </div>
+        <div>
+            <textarea id="post-message" required></textarea>
+        </div>
+        <button type="submit">投稿!</button>
+    </form>
 </body>
 </html>
