@@ -1,7 +1,6 @@
 import { serveDir } from 'https://deno.land/std@0.208.0/http/file_server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.5';
 import 'https://deno.land/std@0.193.0/dotenv/load.ts';
-import { isSuccessfulStatus } from 'https://deno.land/std@0.208.0/http/status.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
 const SUPABASE_API_KEY = Deno.env.get("SUPABASE_API_KEY");
@@ -65,14 +64,13 @@ Deno.serve(async (req) => {
         const { error } = await supabaseClient.from("messages").delete().eq("id", Number(messsageId));
 
         if (error) {
-            return new Response(JSON.stringify(error)j, { status: 500 });
+            return new Response(JSON.stringify(error), { status: 500 });
         }
 
         return new Response(JSON.stringify({
             resp: "success"
         }));
     }
-
 
     return serveDir(req, {
         fsRoot: 'public',
